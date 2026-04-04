@@ -4,12 +4,11 @@
 
 #include <Hazel.h>
 
-class SandboxApp : public Hazel::Application {
+class SandboxApp : public Hazel::Application
+{
 public:
     SandboxApp() = default;
     ~SandboxApp() = default;
 };
 
-Hazel::Application* Hazel::CreateApplication() {
-    return new SandboxApp();
-}
+Hazel::Application *Hazel::CreateApplication() { return new SandboxApp(); }

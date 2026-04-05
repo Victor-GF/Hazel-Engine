@@ -16,11 +16,10 @@ int main(int argc, char **argv)
     HAZEL_CORE_WARN("Initialized Core Logger");
     HAZEL_WARN("Initialized Client Logger");
 
-    HAZEL_INFO("Hello World! Today is {0}", 4);
-
     auto application = Hazel::CreateApplication();
     application->Run();
     delete application;
+
     return 0;
 }
 

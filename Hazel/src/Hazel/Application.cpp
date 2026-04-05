@@ -7,11 +7,10 @@
 #include "Log.h"
 #include "Platform/GLFW/GLFWWindow.h"
 
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Hazel
 {
-#define BIND_EVENT_FUNCTION(func)
 
     Application::Application()
     {

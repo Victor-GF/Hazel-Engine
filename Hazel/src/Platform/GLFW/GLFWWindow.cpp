@@ -9,6 +9,8 @@
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/Log.h"
 
+#include <glad/glad.h>
+
 namespace Hazel
 {
     static bool s_GLFWInitialized = false;
@@ -43,6 +45,10 @@ namespace Hazel
 
         m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.begin(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
+
+        const auto gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        HAZEL_CORE_ASSERT(gladStatus, "Could not initialize GLAD!");
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
 
@@ -112,19 +118,23 @@ namespace Hazel
                                        }
                                        }
                                    });
-        glfwSetScrollCallback(m_Window, [](GLFWwindow *window, double xpos, double ypos)
-        {
-            GLFWWindowData &data = *static_cast<GLFWWindowData *>(glfwGetWindowUserPointer(window));
+        glfwSetScrollCallback(m_Window,
+                              [](GLFWwindow *window, double xpos, double ypos)
+                              {
+                                  GLFWWindowData &data =
+                                      *static_cast<GLFWWindowData *>(glfwGetWindowUserPointer(window));
 
-            MouseScrolledEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
-            data.EventCallback(event);
-        });
-        glfwSetCursorPosCallback(m_Window, [](GLFWwindow *window, const double xpos, const double ypos)
-        {
-            GLFWWindowData &data = *static_cast<GLFWWindowData *>(glfwGetWindowUserPointer(window));
-            MouseMovedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
-            data.EventCallback(event);
-        });
+                                  MouseScrolledEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
+                                  data.EventCallback(event);
+                              });
+        glfwSetCursorPosCallback(m_Window,
+                                 [](GLFWwindow *window, const double xpos, const double ypos)
+                                 {
+                                     GLFWWindowData &data =
+                                         *static_cast<GLFWWindowData *>(glfwGetWindowUserPointer(window));
+                                     MouseMovedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
+                                     data.EventCallback(event);
+                                 });
     }
 
     void GLFWWindow::OnUpdate()

@@ -28,6 +28,12 @@ namespace Hazel
         dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent &win_close_event)
                                               { return OnWindowClosed(win_close_event); });
         HAZEL_CORE_INFO("{0}", e.ToString());
+
+        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+        {
+            (*--it)->OnEvent(e);
+            if (e.Handled) break;
+        }
     }
 
     void Application::Run()
@@ -36,6 +42,12 @@ namespace Hazel
         {
             glClearColor(0.3, 0.6, 0.15, 1);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            for (const auto layer : m_LayerStack)
+            {
+                layer->OnUpdate();
+            }
+
             m_Window->OnUpdate();
         }
     }
@@ -46,6 +58,12 @@ namespace Hazel
         return true;
     }
 
-    // To be defined on Client
-    Application *CreateApplication();
+    void Application::PushLayer(Layer *layer)
+    {
+        m_LayerStack.PushLayer(layer);
+    }
+    void Application::PushOverlay(Layer *overlay)
+    {
+        m_LayerStack.PushOverlay(overlay);
+    }
 } // namespace Hazel

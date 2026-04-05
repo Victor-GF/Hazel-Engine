@@ -5,8 +5,9 @@
 #pragma once
 
 #include "Core.h"
-#include "Window.h"
 #include "Events/ApplicationEvent.h"
+#include "LayerStack.h"
+#include "Window.h"
 
 namespace Hazel
 {
@@ -17,14 +18,20 @@ namespace Hazel
         virtual ~Application();
 
         void Run();
-        void OnEvent(Event& e);
+        void OnEvent(Event &e);
+
+        void PushLayer(Layer *layer);
+        void PushOverlay(Layer *overlay);
 
     private:
-        bool OnWindowClosed(WindowCloseEvent& e);
+        bool OnWindowClosed(WindowCloseEvent &e);
 
         std::unique_ptr<Window> m_Window;
         bool m_IsRunning;
+
+        LayerStack m_LayerStack;
     };
 
+    // To be defined on Client
     Application *CreateApplication();
 } // namespace Hazel

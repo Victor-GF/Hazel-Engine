@@ -15,7 +15,7 @@ namespace Hazel
     /**
      * Description
      */
-    constexpr auto LOG_PATTERN = "%^[%T] %n: %v%$";
+    constexpr auto LOG_PATTERN = "%^[%T] [%n] %v%$";
 
     void Log::Init()
     {

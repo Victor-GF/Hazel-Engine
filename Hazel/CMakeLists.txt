@@ -2,7 +2,7 @@
 file(GLOB_RECURSE HAZEL_SOURCES
         "src/Hazel/*.cpp" "src/Hazel/*.h"
         "src/Hazel/Events/*.cpp" "src/Hazel/Events/*.h"
-        "src/Platform/Windows/*.cpp" "src/Platform/Windows/*.h"
+        "src/Platform/GLFW/*.cpp" "src/Platform/GLFW/*.h"
 )
 
 add_library(Hazel SHARED

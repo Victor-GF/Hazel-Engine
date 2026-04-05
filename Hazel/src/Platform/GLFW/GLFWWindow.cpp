@@ -2,7 +2,7 @@
 // Created by victor on 4/4/26.
 //
 
-#include "WinWindow.h"
+#include "GLFWWindow.h"
 
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Events/KeyEvent.h"
@@ -15,20 +15,20 @@ namespace Hazel
 
     Window *Window::Create(const WindowProps &props)
     {
-        return new WinWindow(props);
+        return new GLFWWindow(props);
     }
 
-    WinWindow::WinWindow(const WindowProps &props)
+    GLFWWindow::GLFWWindow(const WindowProps &props)
     {
         Init(props);
     }
 
-    WinWindow::~WinWindow()
+    GLFWWindow::~GLFWWindow()
     {
         Shutdown();
     }
 
-    void WinWindow::Init(const WindowProps &props)
+    void GLFWWindow::Init(const WindowProps &props)
     {
         m_Data.Title = props.Title;
         m_Data.Width = props.Width;
@@ -50,24 +50,24 @@ namespace Hazel
         SetVSync(true);
     }
 
-    void WinWindow::OnUpdate()
+    void GLFWWindow::OnUpdate()
     {
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
     }
 
-    void WinWindow::SetVSync(bool enabled)
+    void GLFWWindow::SetVSync(bool enabled)
     {
         if (enabled) glfwSwapInterval(1);
         else glfwSwapInterval(0);
 
         m_Data.VSync = enabled;
     }
-    bool WinWindow::IsVSync() const
+    bool GLFWWindow::IsVSync() const
     {
         return m_Data.VSync;
     }
-    void WinWindow::Shutdown()
+    void GLFWWindow::Shutdown()
     {
         glfwDestroyWindow(m_Window);
     }

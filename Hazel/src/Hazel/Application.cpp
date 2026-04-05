@@ -5,7 +5,7 @@
 #include "Application.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Log.h"
-#include "Platform/Windows/WinWindow.h"
+#include "Platform/GLFW/GLFWWindow.h"
 
 #include <GLFW/glfw3.h>
 

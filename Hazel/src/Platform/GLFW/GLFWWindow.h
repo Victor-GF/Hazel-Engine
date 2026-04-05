@@ -9,11 +9,11 @@
 
 namespace Hazel
 {
-    class WinWindow : public Window
+    class GLFWWindow : public Window
     {
     public:
-        WinWindow(const WindowProps &props);
-        virtual ~WinWindow();
+        GLFWWindow(const WindowProps &props);
+        ~GLFWWindow() override;
 
         void OnUpdate() override;
 
@@ -33,7 +33,7 @@ namespace Hazel
 
         GLFWwindow *m_Window;
 
-        struct WindowData
+        struct GLFWWindowData
         {
             std::string_view Title;
             unsigned int Width, Height;
@@ -42,7 +42,7 @@ namespace Hazel
             EventCallbackFn EventCallback;
         };
 
-        WindowData m_Data;
+        GLFWWindowData m_Data;
     };
 
 } // namespace Hazel

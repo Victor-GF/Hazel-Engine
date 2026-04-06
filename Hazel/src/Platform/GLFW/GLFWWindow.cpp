@@ -4,6 +4,7 @@
 
 #include "GLFWWindow.h"
 
+#include "GLFW/glfw3.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
@@ -97,10 +98,18 @@ namespace Hazel
                                }
                                }
                            });
+        glfwSetCharCallback(m_Window,
+                            [](GLFWwindow *window, unsigned int keycode)
+                            {
+                                GLFWWindowData &data = *static_cast<GLFWWindowData *>(glfwGetWindowUserPointer(window));
+
+                                KeyTypedEvent event(keycode);
+                                data.EventCallback(event);
+                            });
         glfwSetMouseButtonCallback(m_Window,
                                    [](GLFWwindow *window, int button, int action, int mods)
                                    {
-                                       GLFWWindowData &data =
+                                       auto &data =
                                            *static_cast<GLFWWindowData *>(glfwGetWindowUserPointer(window));
                                        switch (action)
                                        {

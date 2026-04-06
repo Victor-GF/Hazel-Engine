@@ -9,11 +9,12 @@
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
+#include "Hazel/Input.h"
 #include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
-#include "imgui.h"
 
-#include "GLFW/glfw3.h"
-#include "glad/glad.h"
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <imgui.h>
 
 namespace Hazel
 {
@@ -110,14 +111,14 @@ namespace Hazel
 
         io.AddKeyEvent(key, true);
 
-        io.AddKeyEvent(ImGuiMod_Ctrl, (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) ||
-                                          (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
-        io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) ||
-                                           (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS));
-        io.AddKeyEvent(ImGuiMod_Alt, (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) ||
-                                         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS));
-        io.AddKeyEvent(ImGuiMod_Super, (glfwGetKey(window, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS) ||
-                                           (glfwGetKey(window, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS));
+        io.AddKeyEvent(ImGuiMod_Ctrl,
+                       (Input::IsKeyPressed(GLFW_KEY_LEFT_CONTROL) || Input::IsKeyPressed(GLFW_KEY_RIGHT_CONTROL)));
+        io.AddKeyEvent(ImGuiMod_Shift,
+                       (Input::IsKeyPressed(GLFW_KEY_LEFT_SHIFT) || Input::IsKeyPressed(GLFW_KEY_RIGHT_SHIFT)));
+        io.AddKeyEvent(ImGuiMod_Alt,
+                       (Input::IsKeyPressed(GLFW_KEY_LEFT_ALT) || Input::IsKeyPressed(GLFW_KEY_RIGHT_ALT)));
+        io.AddKeyEvent(ImGuiMod_Super,
+                       (Input::IsKeyPressed(GLFW_KEY_LEFT_SUPER) || Input::IsKeyPressed(GLFW_KEY_RIGHT_SUPER)));
 
         return false;
     }

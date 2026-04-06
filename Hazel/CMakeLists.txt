@@ -27,6 +27,7 @@ add_subdirectory(vendor/Glad)
 
 # ImGui
 add_subdirectory(vendor/ImGui)
+target_link_libraries(ImGui PUBLIC glfw)
 
 # Macros
 target_compile_definitions(Hazel PRIVATE

@@ -11,9 +11,12 @@
 
 namespace Hazel
 {
+    Application* Application::s_Application = nullptr;
 
     Application::Application()
     {
+        HAZEL_CORE_ASSERT(s_Application == nullptr, "Application already exists!");
+        s_Application = this;
         const auto windowProps = WindowProps("Hazel", 1280, 720);
         m_Window = std::unique_ptr<Window>(Window::Create(windowProps));
         m_IsRunning = true;
@@ -60,9 +63,11 @@ namespace Hazel
     void Application::PushLayer(Layer *layer)
     {
         m_LayerStack.PushLayer(layer);
+        layer->OnAttach();
     }
     void Application::PushOverlay(Layer *overlay)
     {
         m_LayerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 } // namespace Hazel

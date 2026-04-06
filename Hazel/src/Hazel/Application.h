@@ -23,7 +23,11 @@ namespace Hazel
         void PushLayer(Layer *layer);
         void PushOverlay(Layer *overlay);
 
+        static Application& Get() { return *s_Application; }
+        Window& GetWindow() const { return *m_Window; }
     private:
+        static Application* s_Application;
+
         bool OnWindowClosed(WindowCloseEvent &e);
 
         std::unique_ptr<Window> m_Window;

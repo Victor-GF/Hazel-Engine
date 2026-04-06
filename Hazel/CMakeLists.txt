@@ -3,6 +3,7 @@ file(GLOB_RECURSE HAZEL_SOURCES
         "src/Hazel/*.cpp" "src/Hazel/*.h"
         "src/Hazel/Events/*.cpp" "src/Hazel/Events/*.h"
         "src/Platform/GLFW/*.cpp" "src/Platform/GLFW/*.h"
+        "src/Platform/OpenGL/*.cpp" "src/Platform/OpenGL/*.h"
 )
 
 add_library(Hazel SHARED
@@ -19,13 +20,13 @@ set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include")
 
 # GLFW
 find_package(OpenGL REQUIRED)
-add_subdirectory("vendor/GLFW")
+add_subdirectory(vendor/GLFW)
 
 # GLAD
-add_library(Glad STATIC "vendor/Glad/src/glad.c")
-set_target_properties(Glad PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set(GLAD_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/Glad/include")
-target_include_directories(Glad PUBLIC ${GLAD_INCLUDE_DIR})
+add_subdirectory(vendor/Glad)
+
+# ImGui
+add_subdirectory(vendor/ImGui)
 
 # Macros
 target_compile_definitions(Hazel PRIVATE
@@ -34,10 +35,10 @@ target_compile_definitions(Hazel PRIVATE
 
 target_include_directories(Hazel PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_include_directories(Hazel PUBLIC ${SPDLOG_INCLUDE_DIR})
-target_include_directories(Hazel PUBLIC ${GLAD_INCLUDE_DIR})
 
 target_link_libraries(Hazel PUBLIC
-        glfw
         OpenGL::GL
+        glfw
         Glad
+        ImGui
 )

@@ -24,6 +24,7 @@ namespace Hazel
         m_IsRunning = true;
         m_Window->SetEventCallback([this](Event &event) { return OnEvent(event); });
     }
+    
     Application::~Application() {}
 
     void Application::OnEvent(Event &e)
@@ -31,7 +32,6 @@ namespace Hazel
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent &win_close_event)
                                               { return OnWindowClosed(win_close_event); });
-        HAZEL_CORE_INFO("{0}", e.ToString());
 
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
@@ -52,9 +52,6 @@ namespace Hazel
                 layer->OnUpdate();
             }
 
-            auto[x, y] = Input::GetMousePosition();
-            HAZEL_CORE_TRACE("{0}, {1}", x, y);
-
             m_Window->OnUpdate();
         }
     }
@@ -70,6 +67,7 @@ namespace Hazel
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
     }
+    
     void Application::PushOverlay(Layer *overlay)
     {
         m_LayerStack.PushOverlay(overlay);

@@ -29,17 +29,23 @@ add_subdirectory(vendor/Glad)
 add_subdirectory(vendor/ImGui)
 target_link_libraries(ImGui PUBLIC glfw)
 
+# GLM
+add_subdirectory(vendor/glm)
+
 # Macros
 target_compile_definitions(Hazel PRIVATE
         HZ_BUILD_DLL HZ_ENABLE_ASSERTS
         GLFW_INCLUDE_NONE)
 
-target_include_directories(Hazel PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
-target_include_directories(Hazel PUBLIC ${SPDLOG_INCLUDE_DIR})
+target_include_directories(Hazel PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/src"
+        ${SPDLOG_INCLUDE_DIR}
+)
 
 target_link_libraries(Hazel PUBLIC
         OpenGL::GL
         glfw
         Glad
         ImGui
+        glm
 )

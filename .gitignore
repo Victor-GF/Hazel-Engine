@@ -14,3 +14,6 @@ Hazel/vendor/GLFW/
 Hazel/vendor/glm/
 Hazel/vendor/ImGui/
 Hazel/vendor/spdlog/
+
+# others
+imgui.ini

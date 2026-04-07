@@ -6,6 +6,7 @@
 
 #include "Core.h"
 #include "Events/ApplicationEvent.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
 #include "Window.h"
 
@@ -13,6 +14,12 @@ namespace Hazel
 {
     class HAZEL_API Application
     {
+        static Application* s_Application;
+        std::unique_ptr<Window> m_Window;
+        ImGuiLayer* m_ImGuiLayer;
+        bool m_IsRunning;
+        LayerStack m_LayerStack;
+        
     public:
         Application();
         virtual ~Application();
@@ -26,14 +33,8 @@ namespace Hazel
         static Application& Get() { return *s_Application; }
         Window& GetWindow() const { return *m_Window; }
     private:
-        static Application* s_Application;
+        bool OnWindowClosed(WindowCloseEvent &e);      
 
-        bool OnWindowClosed(WindowCloseEvent &e);
-
-        std::unique_ptr<Window> m_Window;
-        bool m_IsRunning;
-
-        LayerStack m_LayerStack;
     };
 
     // To be defined on Client

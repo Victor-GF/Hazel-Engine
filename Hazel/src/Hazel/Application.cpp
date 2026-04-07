@@ -8,6 +8,7 @@
 #include "Platform/GLFW/GLFWWindow.h"
 
 #include <glad/glad.h>
+#include <memory>
 
 #include "Input.h"
 
@@ -19,10 +20,16 @@ namespace Hazel
     {
         HAZEL_CORE_ASSERT(s_Application == nullptr, "Application already exists!");
         s_Application = this;
+
         const auto windowProps = WindowProps("Hazel", 1280, 720);
         m_Window = std::unique_ptr<Window>(Window::Create(windowProps));
+
         m_IsRunning = true;
+        
         m_Window->SetEventCallback([this](Event &event) { return OnEvent(event); });
+
+        m_ImGuiLayer = new ImGuiLayer();
+        PushOverlay(m_ImGuiLayer);
     }
     
     Application::~Application() {}
@@ -44,13 +51,20 @@ namespace Hazel
     {
         while (m_IsRunning)
         {
-            glClearColor(0.3, 0.6, 0.15, 1);
+            glClearColor(0.12, 0.12, 0.12, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (const auto layer : m_LayerStack)
             {
                 layer->OnUpdate();
             }
+
+            m_ImGuiLayer->Begin();
+            for (auto* layer : m_LayerStack) 
+            {
+                layer->OnImGuiRender();
+            }
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }
@@ -64,12 +78,16 @@ namespace Hazel
 
     void Application::PushLayer(Layer *layer)
     {
+        HAZEL_CORE_ASSERT(layer != nullptr, "Layer cannot be nullptr!");
+
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
     }
-    
+
     void Application::PushOverlay(Layer *overlay)
     {
+        HAZEL_CORE_ASSERT(overlay, "Layer cannot be nullptr!");
+        
         m_LayerStack.PushOverlay(overlay);
         overlay->OnAttach();
     }

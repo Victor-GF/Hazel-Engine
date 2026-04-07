@@ -33,7 +33,7 @@ namespace Hazel
         m_Data.Width = props.Width;
         m_Data.Height = props.Height;
 
-        HAZEL_CORE_INFO("Creating WinWindow {0} ({1}, {2})", props.Title, props.Width, props.Height);
+        HAZEL_CORE_INFO("Creating GLFWWindow {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
         if (!s_GLFWInitialized)
         {

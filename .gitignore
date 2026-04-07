@@ -8,3 +8,9 @@ cmake-build-relwithdebinfo/
 # VS Code
 build/
 .cache/
+
+# submodules
+Hazel/vendor/GLFW/
+Hazel/vendor/glm/
+Hazel/vendor/ImGui/
+Hazel/vendor/spdlog/

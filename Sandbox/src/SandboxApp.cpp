@@ -2,6 +2,7 @@
 // Created by victor on 4/4/26.
 //
 
+#include "imgui.h"
 #include <Hazel.h>
 
 class ExampleLayer : public Hazel::Layer
@@ -13,6 +14,13 @@ public:
     {
         if (Hazel::Input::IsKeyPressed(HAZEL_KEY_TAB))
             HAZEL_TRACE("Tab key is pressed (poll)");
+    }
+
+    void OnImGuiRender() override
+    {
+        ImGui::Begin("Teste");
+        ImGui::Text("Hello World!");
+        ImGui::End();
     }
 
     void OnEvent(Hazel::Event &event) override
@@ -33,7 +41,6 @@ public:
     SandboxApp()
     {
         PushLayer(new ExampleLayer());
-        PushOverlay(new Hazel::ImGuiLayer());
     };
     ~SandboxApp() {
 

@@ -35,7 +35,11 @@ add_subdirectory(vendor/glm)
 # Macros
 target_compile_definitions(Hazel PRIVATE
         HZ_BUILD_DLL HZ_ENABLE_ASSERTS
-        GLFW_INCLUDE_NONE)
+)
+target_compile_definitions(ImGui PUBLIC
+        IMGUI_IMPL_OPENGL_LOADER_GLAD
+        GLFW_INCLUDE_NONE
+)
 
 target_include_directories(Hazel PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/src"

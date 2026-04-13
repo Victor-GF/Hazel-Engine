@@ -14,7 +14,7 @@
 
 namespace Hazel
 {
-    constexpr std::string ImGuiLayerName = "ImGuiLayer";
+    constexpr std::string_view ImGuiLayerName = "ImGuiLayer";
 
     ImGuiLayer::ImGuiLayer() : Layer(ImGuiLayerName) {}
 
@@ -51,7 +51,7 @@ namespace Hazel
 
         // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init("#version 460");
+        ImGui_ImplOpenGL3_Init("#version 410");
     }
 
     void ImGuiLayer::OnDetach()

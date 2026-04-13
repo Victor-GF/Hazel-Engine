@@ -4,17 +4,14 @@
 
 #include "Application.h"
 #include "Hazel/Events/ApplicationEvent.h"
-#include "Log.h"
-#include "Platform/GLFW/GLFWWindow.h"
 
+#include <cstdint>
 #include <glad/glad.h>
 #include <memory>
 
-#include "Input.h"
-
 namespace Hazel
 {
-    Application* Application::s_Application = nullptr;
+    Application *Application::s_Application = nullptr;
 
     Application::Application()
     {
@@ -25,13 +22,36 @@ namespace Hazel
         m_Window = std::unique_ptr<Window>(Window::Create(windowProps));
 
         m_IsRunning = true;
-        
+
         m_Window->SetEventCallback([this](Event &event) { return OnEvent(event); });
 
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
+
+        glGenVertexArrays(1, &m_VertexArray);
+        glBindVertexArray(m_VertexArray);
+
+        glGenBuffers(1, &m_VertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+
+        float vertices[9] = {
+            -0.5f, -0.5f, 0.0f, // 1
+            0.0f,  0.5f,  0.0f, // 2
+            0.5f,  -0.5f, 0.0f  // 3
+        };
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+        glGenBuffers(1, &m_IndexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+
+        uint32_t indices[3] = {0, 1, 2};
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     }
-    
+
     Application::~Application() {}
 
     void Application::OnEvent(Event &e)
@@ -43,7 +63,8 @@ namespace Hazel
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
             (*--it)->OnEvent(e);
-            if (e.Handled) break;
+            if (e.Handled)
+                break;
         }
     }
 
@@ -54,13 +75,16 @@ namespace Hazel
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            glBindVertexArray(m_VertexArray);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
             for (const auto layer : m_LayerStack)
             {
                 layer->OnUpdate();
             }
 
             m_ImGuiLayer->Begin();
-            for (auto* layer : m_LayerStack) 
+            for (auto *layer : m_LayerStack)
             {
                 layer->OnImGuiRender();
             }
@@ -87,7 +111,7 @@ namespace Hazel
     void Application::PushOverlay(Layer *overlay)
     {
         HAZEL_CORE_ASSERT(overlay, "Layer cannot be nullptr!");
-        
+
         m_LayerStack.PushOverlay(overlay);
         overlay->OnAttach();
     }

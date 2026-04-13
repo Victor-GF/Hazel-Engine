@@ -9,6 +9,7 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
 #include "Window.h"
+#include <cstdint>
 
 namespace Hazel
 {
@@ -19,6 +20,8 @@ namespace Hazel
         ImGuiLayer* m_ImGuiLayer;
         bool m_IsRunning;
         LayerStack m_LayerStack;
+
+        uint32_t m_VertexArray, m_VertexBuffer, m_IndexBuffer;
         
     public:
         Application();

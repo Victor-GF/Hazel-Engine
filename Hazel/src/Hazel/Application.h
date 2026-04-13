@@ -9,7 +9,8 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
 #include "Window.h"
-#include <cstdint>
+
+#include "Hazel/Renderer/Shader.h"
 
 namespace Hazel
 {
@@ -22,6 +23,7 @@ namespace Hazel
         LayerStack m_LayerStack;
 
         uint32_t m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+        std::unique_ptr<Shader> m_Shader;
         
     public:
         Application();

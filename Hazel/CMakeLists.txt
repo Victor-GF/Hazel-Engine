@@ -2,6 +2,8 @@
 file(GLOB_RECURSE HAZEL_SOURCES
         "src/Hazel/*.cpp" "src/Hazel/*.h"
         "src/Hazel/Events/*.cpp" "src/Hazel/Events/*.h"
+        "src/Hazel/Renderer/*.cpp" "src/Hazel/Renderer/*.h"
+        "src/Hazel/ImGui/*.cpp" "src/Hazel/ImGui/*.h"
         "src/Platform/GLFW/*.cpp" "src/Platform/GLFW/*.h"
         "src/Platform/OpenGL/*.cpp" "src/Platform/OpenGL/*.h"
 )

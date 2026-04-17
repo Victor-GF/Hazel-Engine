@@ -7,10 +7,12 @@
 #include "Core.h"
 #include "Events/ApplicationEvent.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
+#include "Hazel/Renderer/Buffer.h"
 #include "LayerStack.h"
 #include "Window.h"
 
 #include "Hazel/Renderer/Shader.h"
+#include <memory>
 
 namespace Hazel
 {
@@ -22,8 +24,10 @@ namespace Hazel
         bool m_IsRunning;
         LayerStack m_LayerStack;
 
-        uint32_t m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+        uint32_t m_VertexArray;
         std::unique_ptr<Shader> m_Shader;
+        std::unique_ptr<VertexBuffer> m_VertexBuffer;
+        std::unique_ptr<IndexBuffer> m_IndexBuffer;
         
     public:
         Application();

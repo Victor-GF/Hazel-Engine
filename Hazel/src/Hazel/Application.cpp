@@ -44,7 +44,7 @@ namespace Hazel
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
         uint32_t indices[3] = {0, 1, 2};
-        m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
+        m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
         std::string_view vertexSrc = R"(
             #version 330 core
@@ -100,7 +100,7 @@ namespace Hazel
 
             m_Shader->Bind();
             glBindVertexArray(m_VertexArray);
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
             for (const auto layer : m_LayerStack)
             {

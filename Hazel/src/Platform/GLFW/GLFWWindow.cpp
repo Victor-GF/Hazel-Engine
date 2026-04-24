@@ -42,7 +42,7 @@ namespace Hazel
             s_GLFWInitialized = true;
         }
 
-        m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.begin(), nullptr, nullptr);
+        m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.data(), nullptr, nullptr);
 
         m_Context = new OpenGLContext(m_Window);
         m_Context->Init(); 

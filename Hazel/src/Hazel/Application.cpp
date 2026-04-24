@@ -6,11 +6,35 @@
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Renderer/Buffer.h"
 
+#include <cstdint>
 #include <glad/glad.h>
+#include <vector>
 
 namespace Hazel
 {
     Application *Application::s_Application = nullptr;
+
+    static GLenum ShaderDataTypeToOpenGLDataType(ShaderDataType type) {
+        switch (type)
+        {
+        case ShaderDataType::Float:  return GL_FLOAT;
+        case ShaderDataType::Float2: return GL_FLOAT;
+        case ShaderDataType::Float3: return GL_FLOAT;
+        case ShaderDataType::Float4: return GL_FLOAT;
+        case ShaderDataType::Mat3:   return GL_FLOAT;
+        case ShaderDataType::Mat4:   return GL_FLOAT;
+        case ShaderDataType::Int:    return GL_INT;
+        case ShaderDataType::Int2:   return GL_INT;
+        case ShaderDataType::Int3:   return GL_INT;
+        case ShaderDataType::Int4:   return GL_INT;
+        case ShaderDataType::Bool:   return GL_BOOL;
+        case ShaderDataType::None:
+            break;
+        }
+
+        HAZEL_CORE_ASSERT(false, "Unknown ShaderDataType!");
+        return 0;
+    }
 
     Application::Application()
     {
@@ -38,10 +62,17 @@ namespace Hazel
 
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
+                               {ShaderDataType::Float4, "a_Color"},
+                               {ShaderDataType::Float3, "a_Normal"}};
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+        uint32_t index = 0;
+        for (const auto &element : layout)
+        {
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(index, ShaderDataTypeCount(element.Type), ShaderDataTypeToOpenGLDataType(element.Type), element.Normalized ? GL_TRUE : GL_FALSE, layout., nullptr);
+            ++index; 
+        }
 
         uint32_t indices[3] = {0, 1, 2};
         m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));

@@ -108,9 +108,12 @@ namespace Hazel
         std::string_view Name;
         uint32_t Offset, Size, Count;
         ShaderDataType Type;
+        bool Normalized;
 
-        BufferElement(ShaderDataType type, const std::string_view &name)
-            : Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0)
+        BufferElement() {}
+
+        BufferElement(ShaderDataType type, const std::string_view &name, bool normalized = false)
+            : Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
         {
         }
     };
@@ -133,15 +136,19 @@ namespace Hazel
         }
 
     public:
+        BufferLayout() {}
         BufferLayout(const std::initializer_list<BufferElement> &elements) : m_Elements(elements)
         {
             CalculateOffsetsAndStride();
         }
 
+        inline uint32_t GetStride() const { return m_Stride; }
         inline const std::vector<BufferElement> &GetElements() const { return m_Elements; }
 
         constexpr std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
         constexpr std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
+        constexpr std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
+        constexpr std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
     };
 
     class HAZEL_API VertexBuffer

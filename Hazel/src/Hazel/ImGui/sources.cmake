@@ -1,0 +1,5 @@
+list(APPEND HAZEL_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/ImGuiBuild.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/ImGuiLayer.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/ImGuiLayer.h"
+)

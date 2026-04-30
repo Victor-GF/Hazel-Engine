@@ -1,18 +1,6 @@
 # Define os arquivos de origem
-file(GLOB_RECURSE HAZEL_SOURCES
-        "src/Hazel/*.cpp" "src/Hazel/*.h"
-        "src/Hazel/Events/*.cpp" "src/Hazel/Events/*.h"
-        "src/Hazel/Renderer/*.cpp" "src/Hazel/Renderer/*.h"
-        "src/Hazel/ImGui/*.cpp" "src/Hazel/ImGui/*.h"
-        "src/Platform/GLFW/*.cpp" "src/Platform/GLFW/*.h"
-        "src/Platform/OpenGL/*.cpp" "src/Platform/OpenGL/*.h"
-)
-
-add_library(Hazel SHARED
-        "src/hzpch.cpp"
-        "src/hzpch.h"
-        ${HAZEL_SOURCES}
-)
+include(src/Hazel/sources.cmake)
+add_library(Hazel SHARED ${HAZEL_SOURCES})
 
 # PCH
 target_precompile_headers(Hazel PRIVATE  "src/hzpch.h")

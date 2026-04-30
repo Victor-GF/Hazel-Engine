@@ -8,4 +8,5 @@ list(APPEND HAZEL_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/Shader.h"
     "${CMAKE_CURRENT_LIST_DIR}/VertexArray.h"
     "${CMAKE_CURRENT_LIST_DIR}/VertexArray.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/RendererAPI.h"
 )

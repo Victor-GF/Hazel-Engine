@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 #include <cstdint>
 #include <glad/glad.h>
@@ -63,50 +64,39 @@ namespace Hazel
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
 
-        glGenVertexArrays(1, &m_VertexArray);
-        glBindVertexArray(m_VertexArray);
+        m_VertexArray.reset(VertexArray::Create());
 
-        float vertices[3 * 7] = {
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 1.0f, // 1
-            0.0f,  0.5f,  0.0f, 0.5f, 1.0f, 0.5f, 1.0f, // 2
-            0.5f,  -0.5f, 0.0f, 0.5f, 0.5f, 1.0f, 1.0f  // 3
+        float vertices[3 * 4] = {
+            -0.5f, -0.5f, 0.0f, 
+            0.0f,  0.5f,  0.0f, 
+            0.5f,  -0.5f, 0.0f, 
+            -0.5f,  0.5f, 0.0f, 
         };
 
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-        {
-            BufferLayout layout = {{ShaderDataType::Float3, "a_Position"}, {ShaderDataType::Float4, "a_Color"}};
+        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"}, {ShaderDataType::Float4, "a_Color"}};
 
-            m_VertexBuffer->SetLayout(layout);
-        }
-
-        uint32_t index = 0;
-        const auto& layout = m_VertexBuffer->GetLayout();
-        for (const auto &element : layout)
-        {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, ShaderDataTypeCount(element.Type),
-                                  ShaderDataTypeToOpenGLDataType(element.Type), element.Normalized ? GL_TRUE : GL_FALSE,
-                                  layout.GetStride(), (const void *)(uintptr_t)element.Offset);
-            ++index;
-        }
+        m_VertexBuffer->SetLayout(layout);
+        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
         uint32_t indices[3] = {0, 1, 2};
         m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
         std::string_view vertexSrc = R"(
             #version 330 core
 
             layout(location = 0) in vec3 a_Position;
-            layout(location = 1) in vec4 a_Color;
+            //layout(location = 1) in vec4 a_Color;
 
             out vec3 v_Position;
-            out vec4 v_Color;
+            //out vec4 v_Color;
 
             void main() 
             {
                 v_Position = a_Position;
-                v_Color = a_Color;
+                //v_Color = a_Color;
                 gl_Position = vec4(a_Position, 1.0);                
             }
         )";
@@ -116,12 +106,12 @@ namespace Hazel
             layout(location = 0) out vec4 color;
 
             in vec3 v_Position;
-            in vec4 v_Color;
+            //in vec4 v_Color;
 
             void main() 
             {
-                //color = vec4(v_Position * 0.5 + 0.5, 1.0);
-                color = v_Color;
+                color = vec4(0.2, 0.3, 0.8, 1.0);
+                //color = v_Color;
             }
         )";
 
@@ -152,7 +142,7 @@ namespace Hazel
             glClear(GL_COLOR_BUFFER_BIT);
 
             m_Shader->Bind();
-            glBindVertexArray(m_VertexArray);
+            m_VertexArray->Bind();
             glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
             for (const auto layer : m_LayerStack)

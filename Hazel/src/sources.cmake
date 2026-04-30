@@ -5,3 +5,4 @@ list(APPEND HAZEL_SOURCES
 )
 
 include("${CMAKE_CURRENT_LIST_DIR}/Hazel/sources.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/Platform/sources.cmake")

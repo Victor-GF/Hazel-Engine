@@ -6,6 +6,7 @@
 
 #include "Hazel/Core.h"
 #include "Hazel/Layer.h"
+#include "imgui_internal.h"
 
 namespace Hazel
 {
@@ -23,5 +24,7 @@ namespace Hazel
 
         void Begin();
         void End();
+
+        static ImGuiContext* GetContext() noexcept;
     };
 } // namespace Hazel

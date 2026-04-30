@@ -1,0 +1,12 @@
+list(APPEND HAZEL_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/GLFW/GLFWInput.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/GLFW/GLFWInput.h"
+    "${CMAKE_CURRENT_LIST_DIR}/GLFW/GLFWWindow.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/GLFW/GLFWWindow.h"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLBuffer.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLBuffer.h"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLContext.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLContext.h"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLVertexArray.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLVertexArray.h"
+)

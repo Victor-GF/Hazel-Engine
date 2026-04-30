@@ -1,5 +1,5 @@
 # Define os arquivos de origem
-include(src/Hazel/sources.cmake)
+include(src/sources.cmake)
 add_library(Hazel SHARED ${HAZEL_SOURCES})
 
 # PCH
@@ -34,12 +34,15 @@ target_compile_definitions(ImGui PUBLIC
 target_include_directories(Hazel PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
         ${SPDLOG_INCLUDE_DIR}
+        "${CMAKE_CURRENT_SOURCE_DIR}/vendor/ImGui"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vendor/Glad/include"
 )
 
 target_link_libraries(Hazel PUBLIC
         OpenGL::GL
         glfw
         Glad
-        ImGui
         glm
+        ImGui
 )

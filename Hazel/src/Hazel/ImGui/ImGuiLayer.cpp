@@ -5,12 +5,14 @@
 #include "ImGuiLayer.h"
 
 #include "Hazel/Application.h"
+#include "imgui_internal.h"
 
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
 #include <GLFW/glfw3.h>
+
 
 namespace Hazel
 {
@@ -19,6 +21,11 @@ namespace Hazel
     ImGuiLayer::ImGuiLayer() : Layer(ImGuiLayerName) {}
 
     ImGuiLayer::~ImGuiLayer() {}
+
+    ImGuiContext* ImGuiLayer::GetContext() noexcept {
+        return ImGui::GetCurrentContext();
+    }
+
 
     void ImGuiLayer::OnAttach()
     {
@@ -51,7 +58,7 @@ namespace Hazel
 
         // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init("#version 410");
+        ImGui_ImplOpenGL3_Init("#version 460");
     }
 
     void ImGuiLayer::OnDetach()

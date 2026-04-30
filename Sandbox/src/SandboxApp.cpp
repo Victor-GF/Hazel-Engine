@@ -10,6 +10,10 @@ class ExampleLayer : public Hazel::Layer
 public:
     ExampleLayer() : Layer("Example") {}
 
+    void OnAttach() override {
+        ImGui::SetCurrentContext(Hazel::ImGuiLayer::GetContext());
+    }
+
     void OnUpdate() override
     {
         if (Hazel::Input::IsKeyPressed(HAZEL_KEY_TAB))

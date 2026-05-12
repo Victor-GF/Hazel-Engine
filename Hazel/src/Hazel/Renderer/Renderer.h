@@ -1,14 +1,17 @@
 #pragma once
 
-#include "RendererCommand.h"
+#include "RenderCommand.h"
 
 namespace Hazel
 {
-    class Renderer
+    class HAZEL_API Renderer
     {
-        static RendererAPI s_RendererAPI;
-
     public:
+        static void BeginScene();
+        static void EndScene();
+
+        static void Submit(const std::shared_ptr<VertexArray>& vertexArray); 
+
         inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
     };
 

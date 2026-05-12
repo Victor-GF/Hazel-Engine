@@ -9,4 +9,6 @@ list(APPEND HAZEL_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLContext.h"
     "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLVertexArray.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLVertexArray.h"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLRendererAPI.h"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenGL/OpenGLRendererAPI.cpp"
 )

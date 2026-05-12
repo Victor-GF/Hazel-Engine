@@ -12,10 +12,10 @@ namespace Hazel
     {
         switch (Renderer::GetAPI())
         {
-        case Hazel::RendererAPI::None:
+        case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "RendererAPI::None not defined API!");
             return nullptr;
-        case Hazel::RendererAPI::OpenGL:
+        case RendererAPI::API::OpenGL:
             return new OpenGLVertexBuffer(vertices, size);
         }
 
@@ -27,10 +27,10 @@ namespace Hazel
     {
         switch (Renderer::GetAPI())
         {
-        case Hazel::RendererAPI::None:
+        case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "RendererAPI::None not defined API!");
             return nullptr;
-        case Hazel::RendererAPI::OpenGL:
+        case RendererAPI::API::OpenGL:
             return new OpenGLIndexBuffer(vertices, size);
         }
 

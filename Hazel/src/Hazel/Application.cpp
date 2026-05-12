@@ -5,11 +5,12 @@
 #include "Application.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
+#include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/VertexArray.h"
+#include "Renderer/RenderCommand.h"
+#include "Renderer/RendererAPI.h"
 
-#include <cstdint>
 #include <glad/glad.h>
-#include <vector>
 
 namespace Hazel
 {
@@ -67,10 +68,7 @@ namespace Hazel
         m_VertexArray.reset(VertexArray::Create());
 
         float vertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f, 
-            0.0f,  0.5f,  0.0f, 
-            0.5f,  -0.5f, 0.0f, 
-            -0.5f,  0.5f, 0.0f, 
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f,
         };
 
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
@@ -138,12 +136,15 @@ namespace Hazel
     {
         while (m_IsRunning)
         {
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+            RenderCommand::Clear();
 
-            m_Shader->Bind();
-            m_VertexArray->Bind();
-            glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::BeginScene();
+            {
+                m_Shader->Bind();
+                Renderer::Submit(m_VertexArray);
+            }
+            Renderer::EndScene();
 
             for (const auto layer : m_LayerStack)
             {

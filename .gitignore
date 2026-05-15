@@ -10,10 +10,10 @@ build/
 .cache/
 
 # submodules
-Hazel/vendor/GLFW/
-Hazel/vendor/glm/
-Hazel/vendor/ImGui/
-Hazel/vendor/spdlog/
+#Hazel/vendor/GLFW/
+#Hazel/vendor/glm/
+#Hazel/vendor/ImGui/
+#Hazel/vendor/spdlog/
 
 # others
 imgui.ini

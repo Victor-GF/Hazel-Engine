@@ -10,7 +10,7 @@
 #else
 #define HAZEL_API __declspec(dllimport)
 #endif
-#elifdef HZ_PLATFORM_LINUX
+#elif defined(HZ_PLATFORM_LINUX)
 #ifdef HZ_BUILD_DLL
 #define HAZEL_API __attribute__((visibility("default")))
 #else

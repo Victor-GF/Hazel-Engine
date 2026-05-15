@@ -9,11 +9,8 @@ cmake-build-relwithdebinfo/
 build/
 .cache/
 
-# submodules
-#Hazel/vendor/GLFW/
-#Hazel/vendor/glm/
-#Hazel/vendor/ImGui/
-#Hazel/vendor/spdlog/
+# Visual Studio
+.vs/
 
 # others
 imgui.ini

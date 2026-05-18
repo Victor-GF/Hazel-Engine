@@ -3,12 +3,7 @@
 //
 
 #include "Application.h"
-#include "Hazel/Events/ApplicationEvent.h"
-#include "Hazel/Renderer/Buffer.h"
 #include "Hazel/Renderer/Renderer.h"
-#include "Hazel/Renderer/VertexArray.h"
-#include "Renderer/RenderCommand.h"
-#include "Renderer/RendererAPI.h"
 
 #include <glad/glad.h>
 
@@ -51,6 +46,7 @@ namespace Hazel
     }
 
     Application::Application()
+        : m_Camera(-2.0f, 2.0f, -2.0f, 2.0f)
     {
         HAZEL_CORE_ASSERT(s_Application == nullptr, "Application already exists!");
         s_Application = this;
@@ -68,17 +64,23 @@ namespace Hazel
         m_VertexArray.reset(VertexArray::Create());
 
         float vertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f,
+            -0.75f, -0.75f, 0.0f, 
+            -0.75f, 0.75f, 0.0f, 
+            0.75f, 0.75f, 0.0f, 
+            0.75f, -0.75f, 0.0f,
         };
 
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"}, {ShaderDataType::Float4, "a_Color"}};
+        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"}};
 
         m_VertexBuffer->SetLayout(layout);
         m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
-        uint32_t indices[3] = {0, 1, 2};
+        uint32_t indices[] = {
+            0, 1, 2,
+            2, 3, 0
+        };
         m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
@@ -86,16 +88,15 @@ namespace Hazel
             #version 330 core
 
             layout(location = 0) in vec3 a_Position;
-            //layout(location = 1) in vec4 a_Color;
+
+            uniform mat4 u_ViewProjection;
 
             out vec3 v_Position;
-            //out vec4 v_Color;
 
             void main() 
             {
                 v_Position = a_Position;
-                //v_Color = a_Color;
-                gl_Position = vec4(a_Position, 1.0);                
+                gl_Position = u_ViewProjection * vec4(a_Position, 1.0);                
             }
         )";
         std::string_view fragmentSrc = R"(
@@ -104,12 +105,10 @@ namespace Hazel
             layout(location = 0) out vec4 color;
 
             in vec3 v_Position;
-            //in vec4 v_Color;
 
             void main() 
             {
                 color = vec4(0.2, 0.3, 0.8, 1.0);
-                //color = v_Color;
             }
         )";
 
@@ -139,10 +138,12 @@ namespace Hazel
             RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
             RenderCommand::Clear();
 
-            Renderer::BeginScene();
+            m_Camera.SetPosition({0.5f, 0.5f, 0.0f});
+            m_Camera.SetRotation(45.0f);
+
+            Renderer::BeginScene(m_Camera);
             {
-                m_Shader->Bind();
-                Renderer::Submit(m_VertexArray);
+                Renderer::Submit(m_Shader, m_VertexArray);
             }
             Renderer::EndScene();
 

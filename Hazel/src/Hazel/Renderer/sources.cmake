@@ -12,4 +12,6 @@ list(APPEND HAZEL_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/RendererAPI.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/RenderCommand.h"
     "${CMAKE_CURRENT_LIST_DIR}/RenderCommand.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/OrthographicCamera.h"
+    "${CMAKE_CURRENT_LIST_DIR}/OrthographicCamera.cpp"
 )

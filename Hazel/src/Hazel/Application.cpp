@@ -46,7 +46,6 @@ namespace Hazel
     }
 
     Application::Application()
-        : m_Camera(-2.0f, 2.0f, -2.0f, 2.0f)
     {
         HAZEL_CORE_ASSERT(s_Application == nullptr, "Application already exists!");
         s_Application = this;
@@ -60,59 +59,6 @@ namespace Hazel
 
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
-
-        m_VertexArray.reset(VertexArray::Create());
-
-        float vertices[3 * 4] = {
-            -0.75f, -0.75f, 0.0f, 
-            -0.75f, 0.75f, 0.0f, 
-            0.75f, 0.75f, 0.0f, 
-            0.75f, -0.75f, 0.0f,
-        };
-
-        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"}};
-
-        m_VertexBuffer->SetLayout(layout);
-        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
-        uint32_t indices[] = {
-            0, 1, 2,
-            2, 3, 0
-        };
-        m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-
-        std::string_view vertexSrc = R"(
-            #version 330 core
-
-            layout(location = 0) in vec3 a_Position;
-
-            uniform mat4 u_ViewProjection;
-
-            out vec3 v_Position;
-
-            void main() 
-            {
-                v_Position = a_Position;
-                gl_Position = u_ViewProjection * vec4(a_Position, 1.0);                
-            }
-        )";
-        std::string_view fragmentSrc = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 color;
-
-            in vec3 v_Position;
-
-            void main() 
-            {
-                color = vec4(0.2, 0.3, 0.8, 1.0);
-            }
-        )";
-
-        m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
     }
 
     Application::~Application() {}
@@ -135,18 +81,6 @@ namespace Hazel
     {
         while (m_IsRunning)
         {
-            RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
-            RenderCommand::Clear();
-
-            m_Camera.SetPosition({0.5f, 0.5f, 0.0f});
-            m_Camera.SetRotation(45.0f);
-
-            Renderer::BeginScene(m_Camera);
-            {
-                Renderer::Submit(m_Shader, m_VertexArray);
-            }
-            Renderer::EndScene();
-
             for (const auto layer : m_LayerStack)
             {
                 layer->OnUpdate();

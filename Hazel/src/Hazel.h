@@ -18,5 +18,11 @@
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
+#include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/RenderCommand.h"
+#include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/Shader.h"
+#include "Hazel/Renderer/VertexArray.h"
+#include "Hazel/Renderer/OrthographicCamera.h"
 
 #endif //THECHERNO_GAMEENGINE_HAZEL_H

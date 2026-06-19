@@ -3,7 +3,10 @@
 //
 
 #include "Application.h"
+#include "Core/TimeStep.h"
+#include "GLFW/glfw3.h"
 #include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Core/Timestep.h"
 
 #include <glad/glad.h>
 
@@ -81,9 +84,13 @@ namespace Hazel
     {
         while (m_IsRunning)
         {
+            float time = static_cast<float>(glfwGetTime());
+            Timestep timestep = time - m_LastFrameTime;
+            m_LastFrameTime = time;
+
             for (const auto layer : m_LayerStack)
             {
-                layer->OnUpdate();
+                layer->OnUpdate(timestep);
             }
 
             m_ImGuiLayer->Begin();

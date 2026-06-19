@@ -25,3 +25,4 @@ list( APPEND HAZEL_SOURCES
 include("${CMAKE_CURRENT_LIST_DIR}/Events/sources.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/ImGui/sources.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/Renderer/sources.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/Core/sources.cmake")

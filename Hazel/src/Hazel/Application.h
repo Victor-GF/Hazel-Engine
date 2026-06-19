@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Core/TimeStep.h"
 #include "Events/ApplicationEvent.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 #include "Hazel/Renderer/Buffer.h"
@@ -25,6 +26,7 @@ namespace Hazel
         ImGuiLayer* m_ImGuiLayer;
         bool m_IsRunning;
         LayerStack m_LayerStack;
+        float m_LastFrameTime = 0.0f;
         
     public:
         Application();

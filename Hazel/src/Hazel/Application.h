@@ -29,7 +29,7 @@ namespace Hazel
         float m_LastFrameTime = 0.0f;
         
     public:
-        Application();
+        Application(); 
         virtual ~Application();
 
         void Run();

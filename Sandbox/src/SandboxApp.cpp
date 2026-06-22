@@ -7,13 +7,17 @@
 #include "Hazel/Input.h"
 #include "Hazel/KeyCodes.h"
 #include "Hazel/Log.h"
+#include "glm/ext.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/ext/vector_float3.hpp"
 #include "imgui.h"
 #include <Hazel.h>
 
 class ExampleLayer : public Hazel::Layer
 {
 public:
-    ExampleLayer() : Layer("Example"), m_Camera(-2.0f, 2.0f, -2.0f, 2.0f), m_CameraPosition(0.0f)
+    ExampleLayer() : Layer("Example"), m_Camera(-2.0f, 2.0f, -2.0f, 2.0f), m_CameraPosition(0.0f), m_SquarePosition(0.0f)
     {
         Rectangle();
         Triangle();
@@ -25,6 +29,7 @@ public:
     {
         HAZEL_TRACE("Delta time: {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
 
+        // Rectangle
         if (Hazel::Input::IsKeyPressed(HAZEL_KEY_LEFT))
             m_CameraPosition.x -= m_CameraMoveSpeed * ts;
         else if (Hazel::Input::IsKeyPressed(HAZEL_KEY_RIGHT))
@@ -39,6 +44,17 @@ public:
         if (Hazel::Input::IsKeyPressed(HAZEL_KEY_D))
             m_CameraRotation += m_CameraRotationSpeed * ts;
 
+        // Triangle
+        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_J))
+            m_SquarePosition.x -= m_CameraMoveSpeed * ts;
+        else if (Hazel::Input::IsKeyPressed(HAZEL_KEY_L))
+            m_SquarePosition.x += m_CameraMoveSpeed * ts;
+
+        else if (Hazel::Input::IsKeyPressed(HAZEL_KEY_I))
+            m_SquarePosition.y += m_CameraMoveSpeed * ts;
+        else if (Hazel::Input::IsKeyPressed(HAZEL_KEY_K))
+            m_SquarePosition.y -= m_CameraMoveSpeed * ts;
+
         Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
         Hazel::RenderCommand::Clear();
 
@@ -46,10 +62,21 @@ public:
         m_Camera.SetRotation(m_CameraRotation);
 
         Hazel::Renderer::BeginScene(m_Camera);
+
+        auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.06f));
+        for (int y = 0; y < 20; y++)
         {
-            Hazel::Renderer::Submit(m_Shader, m_VertexArray);
-            Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVertexArray);
+            for (int x = 0; x < 20; x++)
+            {
+                glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+                auto transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+                Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
+            }
         }
+
+
+        // Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVertexArray);
+
         Hazel::Renderer::EndScene();
     }
 
@@ -77,6 +104,7 @@ private:
 
     Hazel::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;
+    glm::vec3 m_SquarePosition;
     float m_CameraMoveSpeed = 1.0f;
     float m_CameraRotation = 0.0f;
     float m_CameraRotationSpeed = 30.0f;
@@ -111,13 +139,14 @@ private:
             layout(location = 0) in vec3 a_Position;
 
             uniform mat4 u_ViewProjection;
+            uniform mat4 u_Transform;
 
             out vec3 v_Position;
 
             void main() 
             {
                 v_Position = a_Position;
-                gl_Position = u_ViewProjection * vec4(a_Position, 1.0);                
+                gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);                
             }
         )";
         std::string_view fragmentSrc = R"(
